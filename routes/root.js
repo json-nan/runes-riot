@@ -28,7 +28,7 @@ module.exports = async function (fastify, opts) {
       const matchResponse = await fetch(`https://la1.api.riotgames.com/lol/spectator/v5/active-games/by-summoner/${puuid}?api_key=${process.env.RIOT_API_KEY}`)
       
       if (!matchResponse.ok) {
-        throw new Error('Failed to fetch match data')
+        return `${name}-${tag} no está en un juego activo`
       }
       
       const matchData = await matchResponse.json()
@@ -37,9 +37,9 @@ module.exports = async function (fastify, opts) {
 
       const runes = matchData.participants.find(p => p.puuid === puuid).perks.perkIds;
       
-     return runes.map(runeId => runesInfo.find(rune => rune.id === runeId).name).join(', ')
+     return `Runas de ${name}-${tag}: ${runes.map(runeId => runesInfo.find(rune => rune.id === runeId).name).join(', ')}`
     } catch (error) {
-      reply.code(500).send({ error: error.message })
+      return reply.code(500).send({ error: error.message })
     }
   })
 }

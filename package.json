@@ -8,8 +8,8 @@
   },
   "scripts": {
     "test": "node --test test/**/*.test.js",
-    "start": "fastify start -l info app.js",
-    "dev": "fastify start -w -l info -P app.js"
+    "start": "node app.js",
+    "dev": "nodemon app.js"
   },
   "keywords": [],
   "author": "",
@@ -23,5 +23,7 @@
     "node-fetch": "^2.7.0",
     "dotenv": "^16.4.1"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "nodemon": "^3.0.3"
+  }
 }

@@ -1,8 +1,5 @@
 'use strict'
 
-const port = process.env.PORT || 3000;
-const host = ("RENDER" in process.env) ? `0.0.0.0` : `localhost`;
-
 require('dotenv').config()
 
 const path = require('node:path')
@@ -11,10 +8,21 @@ const AutoLoad = require('@fastify/autoload')
 // Pass --options via CLI arguments in command to enable these options.
 const options = {}
 
-module.exports = async function (fastify, opts) {
-  // Place here your custom code!
+const start = async () => {
+  try {
+    await fastify.listen({ 
+      port: process.env.PORT || 3000,
+      host: '0.0.0.0'
+    })
+    console.log(`Server is running on port ${process.env.PORT || 3000}`)
+  } catch (err) {
+    fastify.log.error(err)
+    process.exit(1)
+  }
+}
 
-  // Do not touch the following lines
+module.exports = function (fastify, opts, done) {
+  // Place here your custom code!
 
   // This loads all plugins defined in plugins
   // those should be support plugins that are reused
@@ -31,7 +39,13 @@ module.exports = async function (fastify, opts) {
     options: Object.assign({}, opts)
   })
 
-  fastify.listen({ port, host })
+  // Call done when the plugin is ready
+  done()
+
+  // Start the server if we're running directly
+  if (require.main === module) {
+    start()
+  }
 }
 
 module.exports.options = options

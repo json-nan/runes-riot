@@ -1,5 +1,8 @@
 'use strict'
 
+const port = process.env.PORT || 3000;
+const host = ("RENDER" in process.env) ? `0.0.0.0` : `localhost`;
+
 require('dotenv').config()
 
 const path = require('node:path')
@@ -27,6 +30,8 @@ module.exports = async function (fastify, opts) {
     dir: path.join(__dirname, 'routes'),
     options: Object.assign({}, opts)
   })
+
+  fastify.listen({ port, host })
 }
 
 module.exports.options = options
